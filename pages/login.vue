@@ -41,25 +41,24 @@ export default {
   mounted() {
     this.$validator.localize("en", bahasa);
   },
-
   methods: {
-    login() {
-      let self = this;
-      this.$validator.validateAll().then(isFormValid => {
-        if (isFormValid) {
-          self.$store
-            .dispatch("login", {
-              username: this.username,
-              password: this.password
-            })
-            .then(() => {
-              this.$router.push("dashboard");
-            })
-            .catch(err => {
-              console.log("error when trying to login : ", err);
-            });
+    async login () {
+      const { username, password } = this
+      try {
+
+        const isValid = await this.$validator.validateAll()
+
+        if (isValid) {
+          this.$store.dispatch('login', {
+            username,
+            password
+          })
+
+          this.$router.push('dashboard')
         }
-      });
+      } catch (err) {
+        console.log("error when trying to login : ", err)
+      }
     }
   }
 };
