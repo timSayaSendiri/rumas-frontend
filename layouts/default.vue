@@ -77,14 +77,20 @@
 <script>
   export default {
     data() {
+      console.log(this.$store.getters.isLogedIn)
       return {
         clipped: false,
         drawer: true,
         fixed: false,
-        menus: [
+        menus: !this.$store.getters.isLogedIn ? [
           { icon: 'apps', title: 'Beranda', to: '/' },
+          { icon: 'location_city', title: 'Ajukan Pinjaman', to: '/submit-loan'},
           { icon: 'folder', title: 'Daftar Rumah', to: '/house-list'},
-        ],
+        ] : [ 
+          { icon: 'apps', title: 'Beranda', to: '/' },
+          { icon: 'location_city', title: 'Ajukan Pinjaman', to: '/submit-loan'},
+          { icon: 'profile', title: 'Profile', to: '/profile'}, 
+          { icon: 'folder', title: 'Daftar Rumah', to: '/house-list'},] ,
         miniVariant: false,
         right: true,
         rightDrawer: false,
