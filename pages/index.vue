@@ -2,17 +2,15 @@
   <v-layout column justify-center align-center>
     <v-flex xs12 sm8 md6>
       <v-card>
-        <v-card-title class="headline">Selamat Datang di Rumas</v-card-title>
+
         <v-card-text>
-          <p>Rumas - Cicil Rumah tanpa Bunga</p>
-          <div class="text-xs-center">
-            <logo/>
-          </div>
+            <div class="text-xs-center ma-2">
+              <logo/>
+              <h2 class="headline">Rumas</h2>
+              <span class="subheading">Cicil Rumah Tenang Tanpa Bunga</span>
+            </div>
+
         </v-card-text>
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn color="primary" flat nuxt to="/login">Masuk Sistem</v-btn>
-        </v-card-actions>
       </v-card>
     </v-flex>
   </v-layout>

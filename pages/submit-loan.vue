@@ -116,6 +116,7 @@
     </v-stepper>
     </v-flex>
   </v-layout>
+
 </template>
 <script>
 import bahasa from 'vee-validate/dist/locale/id'

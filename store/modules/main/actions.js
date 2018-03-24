@@ -184,6 +184,26 @@ const actions = {
     } catch (err) {
       console.log(err)
     }
+  },
+  async getProfileData ({ commit }, user_id) {
+    try {
+      const createdProfile = await this.$axios.get(`https://udin.us/rumas-backend/api/users/${user_id}/profiles`) 
+      commit('setUserProfile', createdProfile.data )
+    } catch (err) {
+      console.log(err)
+    }
+  },
+  async getUserTransaction ({ commit }, user_id) {
+    try {
+      const transactions = await this.$axios.get(`https://udin.us/rumas-backend/api/users/${user_id}/transactions`) 
+      commit('fillUserTransaction', transactions.data )
+    } catch (err) {
+      console.log(err)
+    }
+  },
+  async getUserLoan({commit}, user_id) {
+    const loan = await this.$axios.get(`https://udin.us/rumas-backend/api/users/${user_id}/loans`) 
+    commit('fillUserLoan', loan.data[0] ) 
   }
 }
 

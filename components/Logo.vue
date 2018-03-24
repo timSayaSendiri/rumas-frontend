@@ -1,5 +1,5 @@
 <template>
-  <img src="~/assets/images/your-logo-here.png" alt="Fans Logo" class="logo">  
+  <img src="~/assets/images/rumas-logo.png" alt="Fans Logo" class="logo" width="100px">  
 </template>
 
 <style scoped>

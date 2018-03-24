@@ -5,9 +5,11 @@ const state = {
     content: ""
   },
   houseList: [],
+  userTransactions:[],
   currentHousePick: {},
-  currentAccount: {},
-  goldPrice: 596842
+  userLoans:{},
+  userProfile:{},
+  currentAccount: {}
 }
 
 export default state
