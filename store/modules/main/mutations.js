@@ -20,11 +20,11 @@ const mutations = {
     state.currentHousePick = house
   },
   fillCurrentAccount (state, account) {
-    state.account = account
+    state.currentAccount = account
   },
   fillCurrentProfile (state, profile) {
-    state.account = {
-      ...state.account,
+    state.currentAccount = {
+      ...state.currentAccount,
       ...profile
     }
   }

@@ -38,8 +38,6 @@ function xdr(url, method, data, errback) {
 const actions = {
   async getHouses ({ commit }, keyword) {
     const houselist = await this.$axios.post('http://mortgtech-eval-prod.apigee.net/btn-mortgtech/house-list', { keyword })
-    // const houselist = await xdr('http://mortgtech-eval-prod.apigee.net/btn-mortgtech/house-list', 'POST', { 'keyword': 1 }) 
-
     commit('getHouses', houselist)
   },
   nuxtServerInit({ dispatch }, { req }) {
@@ -103,7 +101,7 @@ const actions = {
   async sendAccountData ({ commit }, accountData) {
     try {
       const createdAccount = await this.$axios.post('https://udin.us/rumas-backend/api/users/register', accountData) 
-      commit('fillCurrentAccount', createdAccount.data)
+      commit('fillCurrentAccount', createdAccount.data.userDetail)
     } catch (err) {
       console.log(err)
     }
@@ -111,7 +109,9 @@ const actions = {
   async sendProfileData ({ commit }, profileData) {
     try {
       const createdProfile = await this.$axios.post('https://udin.us/rumas-backend/api/profiles', profileData) 
-      commit('fillCurrentAccount', createdProfile.data)
+      if (createdProfile) {
+        commit('fillCurrentProfile', createdProfile.data)
+      }
     } catch (err) {
       console.log(err)
     }

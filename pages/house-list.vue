@@ -37,8 +37,13 @@ export default {
       houseList: []
     }
   },
+  // computed: {
+  //   ...mapState({
+  //     houseList: state => state.houseList
+  //   })
+  // },
   mounted () {
-    this.$store.dispatch('getHouses')
+    // this.$store.dispatch('getHouses')
     this.houseList = [{
       "id_stk_kavling": 18,
       "id_stk_dev": 0,
@@ -118,11 +123,6 @@ export default {
         }
       })
     }
-  },
-  computed: {
-    ...mapState ({
-      // houseList: state => state.houseList 
-    })
   }
 }
 </script>
