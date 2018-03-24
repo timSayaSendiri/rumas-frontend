@@ -4,7 +4,9 @@ const state = {
     show: false,
     content: ""
   },
-  houseList: []
+  houseList: [],
+  currentHousePick: {},
+  currentAccount: {}
 }
 
 export default state
