@@ -22,11 +22,17 @@ const mutations = {
   fillCurrentAccount (state, account) {
     state.account = account
   },
+  setUserProfile (state, user) {
+    state.userProfile = user
+  },
   fillCurrentProfile (state, profile) {
     state.account = {
       ...state.account,
       ...profile
     }
+  },
+  fillUserTransaction (state, userTransaction) {
+    state.userTransactions = userTransaction
   }
 }
 
