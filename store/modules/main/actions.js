@@ -2,7 +2,7 @@ import authUtil from "~/utils/auth"
 
 const actions = {
   async getHouses ({ commit }, keyword) {
-    const houselist = await this.$axios.post('http://mortgtech-eval-prod.apigee.net/btn-mortgtech/house-list', { keyword })
+    const houselist = await this.$axios.post('https://mortgtech-eval-prod.apigee.net/btn-mortgtech/house-list', { keyword })
     console.log(houselist)
     commit('getHouses', houselist.data.payload)
   },
