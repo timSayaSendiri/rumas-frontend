@@ -1,10 +1,13 @@
 import authUtil from "~/utils/auth"
 
+// const API_BASE_DOMAIN = 'https://udin.us/rumas-backend/api'
+const API_BASE_DOMAIN = 'http://localhost:4000/api'
+
 const actions = {
   async getHouses ({ commit }, keyword) {
-    const houselist = await this.$axios.post('https://mortgtech-eval-prod.apigee.net/btn-mortgtech/house-list', { keyword })
-    console.log(houselist)
-    commit('getHouses', houselist.data.payload)
+    const API_URL = API_BASE_DOMAIN + '/house-list'
+    const { data: { payload: houseList } } = await this.$axios.get(API_URL + '?keyword=' + keyword)
+    commit('getHouses', houseList)
   },
   nuxtServerInit({ dispatch }, { req }) {
     dispatch("initAuth", req);
@@ -58,7 +61,7 @@ const actions = {
   },
   async sendHouseData ({ commit }, houseData) {
     try {
-      const postedHouse = await this.$axios.post('https://udin.us/rumas-backend/api/houses', houseData) 
+      const postedHouse = await this.$axios.post(API_BASE_DOMAIN + '/houses', houseData) 
       commit('fillCurrentHousePick', postedHouse.data)
     } catch (err) {
       console.log(err)
@@ -66,18 +69,118 @@ const actions = {
   },
   async sendAccountData ({ commit }, accountData) {
     try {
-      const createdAccount = await this.$axios.post('https://udin.us/rumas-backend/api/users/register', accountData) 
+      const createdAccount = await this.$axios.post(API_BASE_DOMAIN + '/users/register', accountData) 
       commit('fillCurrentAccount', createdAccount.data.userDetail)
     } catch (err) {
       console.log(err)
     }
   },
   async sendProfileData ({ commit }, profileData) {
+    const balikDate = () => {
+			const detachmentDate = this.profile.birthDate.split('-')
+			const reorderDate = detachmentDate[2] + '-' + detachmentDate[1] + '-' + detachmentDate[0]
+			return reorderDate
+		}
     try {
-      const createdProfile = await this.$axios.post('https://udin.us/rumas-backend/api/profiles', profileData) 
-      if (createdProfile) {
-        commit('fillCurrentProfile', createdProfile.data)
+      const createdBTNProfile = await this.$axios.get(API_BASE_DOMAIN + '/user-register', {
+        params: {
+          nik: profileData.nik,
+          nama_ibu_kandung: profileData.motherName,
+          tgl_lahir: profileData.birthDate,
+          nama: profileData.name
+        }
+      })
+
+      console.log(profileData)
+      console.log(createdBTNProfile)
+
+      const createdBTNAccount = await this.$axios.get(API_BASE_DOMAIN + '/account-creation', {
+        params: {
+          nomor_cif: createdBTNProfile.data.payload.cif_number,
+          amount: profileData.amount
+        }
+      })
+
+      console.log(createdBTNAccount)
+
+      const iso = new Date(balikDate(profileData.birthDate))
+      const createdProfile = await this.$axios.post(API_BASE_DOMAIN + '/profiles', {
+        ...profileData,
+        cifNumber: createdBTNProfile.data.payload.cif_number,
+        birthDate: iso.toISOString()
+      }) 
+
+      commit('fillCurrentProfile', {
+        ...createdProfile.data,
+        nik,
+        motherName,
+        cif_number: createdBTNProfile.data.payload.cif_number,
+        accountAmmount: amount,
+        accountNumber: createdBTNAccount.data.payload.nomor_rekening,
+      })
+    } catch (err) {
+      console.log(err)
+    }
+  },
+  async sendLoanData ({ state, commit }, loanData) {
+    const {
+      priceInRupiah,
+      earnings,
+      goldWeight,
+      tenor,
+      houseId,
+      userId
+    } = loanData
+
+    const {
+      currentAccount: {
+        nik,
+        email,
+        motherName,
+        cif_number,
+        birthDate
       }
+    } = state
+
+    try {
+      const loan = await this.$axios.get(API_BASE_DOMAIN + '/loans', {
+        params: {
+          priceInRupiah,
+          goldWeight,
+          tenor,
+          houseId,
+          userId
+        }
+      })
+
+      const transaction = await this.$axios.get(API_BASE_DOMAIN + '/transactions', {
+        params: {
+          type: 'loan',
+          goldWeight,
+          amountInRupiah: priceInRupiah,
+          date: new Date().toDateString(),
+          poorOfLoan: priceInRupiah,
+          poorOfMonth: tenor,
+          toEthAddress: "",
+          fromEthAddress: "",
+          loanId: loan.id,
+          userId
+        }
+      })
+
+      const creditSubmission = await this.$axios.get(API_BASE_DOMAIN + '/create-submission', {
+        params: {
+          nik,
+          nama: name,
+          tgl_lahir: birthDate,
+          nama_ibu_kandung: motherName,
+          pendapatan: earnings,
+          email,
+          nomor_hp: phone,
+          nomor_cif: cif_number
+        }
+      })
+
     } catch (err) {
       console.log(err)
     }

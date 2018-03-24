@@ -34,6 +34,20 @@
 </v-layout>
 </template>
 <script>
+var firebase = require("firebase/app");
+require("firebase/firestore");
+// Initialize Firebase
+var config = {
+  apiKey: "AIzaSyA5OMPMlNHBNGAZ9SfXou4-2CaeKAIuMxA",
+  authDomain: "rumas-68d29.firebaseapp.com",
+  databaseURL: "https://rumas-68d29.firebaseio.com",
+  projectId: "rumas-68d29",
+  storageBucket: "rumas-68d29.appspot.com",
+  messagingSenderId: "151584561559"
+};
+firebase.initializeApp(config);
+var db = firebase.firestore();
+
 import { mapState } from 'vuex'
 const hargaEmas = 600000
 const userRek = '12345678'
@@ -72,6 +86,14 @@ export default {
   
         const payment = await this.$axios.post(`https://udin.us/rumas-backend/api/users/${userId}/transactions/`, q)
         this.$router.push({path:'profile'})
+        // firebase
+        db.collection("transactions").add(q)
+        .then(function() {
+            console.log("Document successfully written!");
+        })
+        .catch(function(error) {
+            console.error("Error writing document: ", error);
+        });
       }catch(err){
         console.log(err);
         

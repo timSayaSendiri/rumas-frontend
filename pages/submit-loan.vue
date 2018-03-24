@@ -3,11 +3,13 @@
     <v-flex xs12 sm12 md12 text-xs-center mt-5>
       <v-stepper v-model="e1">
         <v-stepper-header>
-        <v-stepper-step step="1" :complete="e1 > 1">Isi Data Rumah</v-stepper-step>
-        <v-divider></v-divider>
-        <v-stepper-step step="2" :complete="e1 > 2">Isi Data Akun</v-stepper-step>
-        <v-divider></v-divider>
-        <v-stepper-step step="3">Isi Data Diri</v-stepper-step>
+					<v-stepper-step step="1" :complete="e1 > 1">Isi Data Rumah</v-stepper-step>
+					<v-divider></v-divider>
+					<v-stepper-step step="2" :complete="e1 > 2">Isi Data Akun</v-stepper-step>
+					<v-divider></v-divider>
+					<v-stepper-step step="3">Isi Data Diri</v-stepper-step>
+					<v-divider></v-divider>
+					<v-stepper-step step="4">Ajukan Pinjaman</v-stepper-step>
         </v-stepper-header>
         <v-stepper-items>
         <v-stepper-content step="1">
@@ -34,7 +36,6 @@
 						</v-list-tile>
 					</v-list>
 					<v-btn color="primary" @click="sendHouseData">Continue</v-btn>
-					<v-btn flat>Cancel</v-btn>
         </v-stepper-content>
         <v-stepper-content step="2">
 					<v-text-field
@@ -47,19 +48,38 @@
 						v-model="account.password"
 					></v-text-field>
 					<v-btn color="primary" @click="sendAccountData">Continue</v-btn>
-					<v-btn flat>Cancel</v-btn>
         </v-stepper-content>
         <v-stepper-content step="3">
 					<v-text-field
 						label="Nama"
 						v-model="profile.name"
 					></v-text-field>
-					<v-date-picker
-						v-model="profile.birthDate"
+					<v-dialog
+						ref="dialog"
+						persistent
+						v-model="modal"
+						lazy
+						full-width
+						width="290px"
+						:return-value.sync="profile.birthDate"
 					>
-					</v-date-picker>
+						<v-text-field
+							slot="activator"
+							label="Tanggal Lahir"
+							v-model="profile.birthDate"
+							prepend-icon="event"
+							readonly
+						></v-text-field>
+						<v-date-picker v-model="profile.birthDate">
+							<v-spacer></v-spacer>
+						</v-date-picker>
+						<v-flex style="height: 100%; background: #fff;">
+							<v-btn block flat @click="modal = false">OK</v-btn>
+						</v-flex>
+					</v-dialog>
 					<v-text-field
 						label="NIK"
+						type="number"
 						v-model="profile.nik"
 					></v-text-field>
 					<v-text-field
@@ -78,10 +98,21 @@
 						label="Alamat"
 						v-model="profile.address"
 					></v-text-field>
+					<v-text-field
+						label="Jumlah Uang Untuk Rekening Yang Akan Dibuat"
+						type="number"
+						v-model="profile.amount"
+					></v-text-field>
 					<v-btn color="primary" @click="sendProfileData ">Continue</v-btn>
-					<v-btn flat>Cancel</v-btn>
         </v-stepper-content>
-        </v-stepper-items>
+				<v-stepper-content step="4">
+					<v-text-field
+						label="Tenor"
+						v-model="tenor"
+					></v-text-field>
+					<v-btn color="primary" @click="initiateLoan">Continue</v-btn>
+				</v-stepper-content>
+			</v-stepper-items>
     </v-stepper>
     </v-flex>
   </v-layout>
@@ -104,6 +135,9 @@ export default {
 				password: ''
 			},
 			profile: {},
+			loanData: {},
+			tenor: 0,
+			modal: false
 		}
 	},
 	mounted() {
@@ -140,7 +174,12 @@ export default {
 			currentHousePick: state => state.main.currentHousePick,
 			currentProfile: state => state.main.currentProfile,
 			currentAccount: state => state.main.currentAccount
-		})
+		}),
+		dateOfBirth () {
+			const detachmentDate = this.profile.birthDate.split('-')
+			const reorderDate = detachmentDate[2] + '-' + detachmentDate[1] + '-' + detachmentDate[0]
+			return reorderDate
+		}
 	},
 	methods: {
 		sendHouseData () {
@@ -153,10 +192,26 @@ export default {
 		},
 		sendProfileData () {
 			this.$store.dispatch('sendProfileData', {
+				...this.profile,
 				userId: this.currentAccount.id,
-				cifNumber: 123213213213,
-				...this.profile
+				birthDate: this.dateOfBirth
 			})
+			this.e1 = 4
+		},
+		initiateLoan () {
+			const { id: houseId, price } = this.currentHousePick
+			const { tenor } = this.loanData
+			const { id: userId } = this.currentAccount
+
+			this.$store.dispatch('sendLoanData', {
+				priceInRupiah: price,
+				goldWeight: price / 600000,
+				tenor,
+				houseId,
+				userId
+			})
+
+			this.$router.push('/profile')
 		}
 	}
 }

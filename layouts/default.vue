@@ -88,8 +88,8 @@
           { icon: 'folder', title: 'Daftar Rumah', to: '/house-list'},
         ] : [ 
           { icon: 'apps', title: 'Beranda', to: '/' },
+          { icon: 'account_circle', title: 'Dasbor', to: '/profile'}, 
           { icon: 'location_city', title: 'Ajukan Pinjaman', to: '/submit-loan'},
-          { icon: 'profile', title: 'Profile', to: '/profile'}, 
           { icon: 'folder', title: 'Daftar Rumah', to: '/house-list'},] ,
         miniVariant: false,
         right: true,
