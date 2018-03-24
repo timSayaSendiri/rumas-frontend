@@ -192,7 +192,7 @@ const actions = {
   },
   async getProfileData ({ commit }, user_id) {
     try {
-      const createdProfile = await this.$axios.get(`https://udin.us/rumas-backend/api/profiles/${user_id}`) 
+      const createdProfile = await this.$axios.get(`https://udin.us/rumas-backend/api/users/${user_id}/profiles`) 
       commit('setUserProfile', createdProfile.data )
     } catch (err) {
       console.log(err)

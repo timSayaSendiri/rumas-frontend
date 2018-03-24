@@ -204,7 +204,7 @@ export default {
 		initiateLoan () {
 			const { id: houseId, price } = this.currentHousePick
 			const { tenor, earnings } = this.loanData
-			const { id: userId } = this.currentAccount
+			const { userId } = this.currentAccount
 
 			this.$store.dispatch('sendLoanData', {
 				priceInRupiah: price,
