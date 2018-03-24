@@ -1,7 +1,12 @@
 import authUtil from "~/utils/auth"
 
-// const API_BASE_DOMAIN = 'https://udin.us/rumas-backend/api'
-const API_BASE_DOMAIN = 'http://localhost:4000/api'
+const API_BASE_DOMAIN = 'https://udin.us/rumas-backend/api'
+// const API_BASE_DOMAIN = 'http://localhost:4000/api'
+const balikDate = (birthDate) => {
+  const detachmentDate = birthDate.split('-')
+  const reorderDate = detachmentDate[2] + '-' + detachmentDate[1] + '-' + detachmentDate[0]
+  return reorderDate
+}
 
 const actions = {
   async getHouses ({ commit }, keyword) {
@@ -75,12 +80,7 @@ const actions = {
       console.log(err)
     }
   },
-  async sendProfileData ({ commit }, profileData) {
-    const balikDate = () => {
-			const detachmentDate = this.profile.birthDate.split('-')
-			const reorderDate = detachmentDate[2] + '-' + detachmentDate[1] + '-' + detachmentDate[0]
-			return reorderDate
-		}
+  async sendProfileData ({ commit, state }, profileData) {
     try {
       const createdBTNProfile = await this.$axios.get(API_BASE_DOMAIN + '/user-register', {
         params: {
@@ -91,17 +91,12 @@ const actions = {
         }
       })
 
-      console.log(profileData)
-      console.log(createdBTNProfile)
-
       const createdBTNAccount = await this.$axios.get(API_BASE_DOMAIN + '/account-creation', {
         params: {
           nomor_cif: createdBTNProfile.data.payload.cif_number,
           amount: profileData.amount
         }
       })
-
-      console.log(createdBTNAccount)
 
       const iso = new Date(balikDate(profileData.birthDate))
       const createdProfile = await this.$axios.post(API_BASE_DOMAIN + '/profiles', {
@@ -110,16 +105,25 @@ const actions = {
         birthDate: iso.toISOString()
       }) 
 
+      const bankAccount = await this.$axios.post(API_BASE_DOMAIN + '/bankaccounts', {
+        bankAccountNumber: createdBTNAccount.data.payload.nomor_rekening,
+        amount: profileData.amount,
+        blockChainAddress: createdBTNAccount.data.payload.nomor_rekening,
+        userId: state.currentAccount.id
+      })
+
       commit('fillCurrentProfile', {
         ...createdProfile.data,
-        nik,
-        motherName,
+        nik: profileData.nik,
+        birthDate: profileData.birthDate,
+        motherName: profileData.motherName,
         cif_number: createdBTNProfile.data.payload.cif_number,
-        accountAmmount: amount,
+        accountAmount: profileData.amount,
         accountNumber: createdBTNAccount.data.payload.nomor_rekening,
+        bankAccount: bankAccount.data
       })
     } catch (err) {
-      console.log(err)
+      console.log(err, 'allSendProfileData')
     }
   },
   async sendLoanData ({ state, commit }, loanData) {
@@ -143,29 +147,26 @@ const actions = {
     } = state
 
     try {
-      const loan = await this.$axios.get(API_BASE_DOMAIN + '/loans', {
-        params: {
-          priceInRupiah,
-          goldWeight,
-          tenor,
-          houseId,
-          userId
-        }
+      const loan = await this.$axios.post(API_BASE_DOMAIN + '/loans', {
+        priceInRupiah,
+        goldWeight,
+        tenor,
+        houseId,
+        userId
       })
 
+      const iso = new Date(balikDate(birthDate))
       const transaction = await this.$axios.get(API_BASE_DOMAIN + '/transactions', {
-        params: {
-          type: 'loan',
-          goldWeight,
-          amountInRupiah: priceInRupiah,
-          date: new Date().toDateString(),
-          poorOfLoan: priceInRupiah,
-          poorOfMonth: tenor,
-          toEthAddress: "",
-          fromEthAddress: "",
-          loanId: loan.id,
-          userId
-        }
+        type: 'loan',
+        goldWeight,
+        amountInRupiah: priceInRupiah,
+        date: iso.toISOString(),
+        poorOfLoan: priceInRupiah,
+        poorOfMonth: tenor,
+        toEthAddress: "",
+        fromEthAddress: "",
+        loanId: loan.id,
+        userId
       })
 
       const creditSubmission = await this.$axios.get(API_BASE_DOMAIN + '/create-submission', {
