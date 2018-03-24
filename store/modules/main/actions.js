@@ -1,44 +1,10 @@
 import authUtil from "~/utils/auth"
-function xdr(url, method, data, errback) {
-  return new Promise((resolve, reject) => {
-    var req;
-
-    if(XMLHttpRequest) {
-      req = new XMLHttpRequest();
-
-      if('withCredentials' in req) {
-        req.open(method, url, true);
-        req.onerror = errback;
-        req.onreadystatechange = function() {
-          if (req.readyState === 4) {
-            if (req.status >= 200 && req.status < 400) {
-              // callback(req.responseText);
-              resolve(req.responseText)
-            } else {
-              reject(new Error('Response returned with non-OK status'))
-            }
-          }
-        };
-        req.send(data);
-      }
-    } else if(XDomainRequest) {
-      req = new XDomainRequest();
-      req.open(method, url);
-      req.onerror = errback;
-      req.onload = function() {
-          resolve(req.responseText);
-      };
-      req.send(data);
-    } else {
-        reject(new Error('CORS not supported'));
-    }
-  })
-}
 
 const actions = {
   async getHouses ({ commit }, keyword) {
     const houselist = await this.$axios.post('http://mortgtech-eval-prod.apigee.net/btn-mortgtech/house-list', { keyword })
-    commit('getHouses', houselist)
+    console.log(houselist)
+    commit('getHouses', houselist.data.payload)
   },
   nuxtServerInit({ dispatch }, { req }) {
     dispatch("initAuth", req);
