@@ -4,6 +4,7 @@
       <v-text-field
         label="Search"
         v-model="searchKeyword"
+        @keyup="getHouses"
       ></v-text-field> 
     </v-flex>
     <v-flex xs12 pa-1 sm6 md3 v-for="(house, index) in houseList" :key="index">
@@ -34,11 +35,16 @@ export default {
   data () {
     return {
       searchKeyword: '',
-      houseList: []
     }
   },
+  computed: {
+    ...mapState({
+      houseList: state => state.main.houseList
+    })
+  },
   mounted () {
-    this.$store.dispatch('getHouses')
+    // this.$store.dispatch('getHouses', this.searchKeyword)
+    /*
     this.houseList = [{
       "id_stk_kavling": 18,
       "id_stk_dev": 0,
@@ -100,8 +106,14 @@ export default {
       "created_at": null,
       "updated_at": null           
     }]
+    */
   },
   methods: {
+    getHouses (e) {
+      if (e.keyCode == 13) {
+        this.$store.dispatch('getHouses', this.searchKeyword)
+      }
+    },
     getLoan ({ nama, alamat, harga, luas_tanah, luas_bangunan, latitude, longitude, gbr1 }) {
       this.$router.push({
         path: '/submit-loan',
@@ -118,11 +130,6 @@ export default {
         }
       })
     }
-  },
-  computed: {
-    ...mapState ({
-      // houseList: state => state.houseList 
-    })
   }
 }
 </script>

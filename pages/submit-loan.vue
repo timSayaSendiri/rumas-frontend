@@ -5,9 +5,9 @@
         <v-stepper-header>
         <v-stepper-step step="1" :complete="e1 > 1">Isi Data Rumah</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="2" :complete="e1 > 2">Isi Data Diri</v-stepper-step>
+        <v-stepper-step step="2" :complete="e1 > 2">Isi Data Akun</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="3">Data Akun</v-stepper-step>
+        <v-stepper-step step="3">Isi Data Diri</v-stepper-step>
         </v-stepper-header>
         <v-stepper-items>
         <v-stepper-content step="1">
@@ -38,13 +38,13 @@
         </v-stepper-content>
         <v-stepper-content step="2">
 					<v-text-field
-						label="Password"
-						v-model="profile.name"
+						label="Email"
+						v-model="account.email"
 					></v-text-field>
 					<v-text-field
 						label="Password"
 						type="password"
-						v-model="profile.name"
+						v-model="account.password"
 					></v-text-field>
 					<v-btn color="primary" @click="sendAccountData">Continue</v-btn>
 					<v-btn flat>Cancel</v-btn>
@@ -54,10 +54,10 @@
 						label="Nama"
 						v-model="profile.name"
 					></v-text-field>
-					<v-text-field
-						label="Tanggal Lahir"
+					<v-date-picker
 						v-model="profile.birthDate"
-					></v-text-field>
+					>
+					</v-date-picker>
 					<v-text-field
 						label="NIK"
 						v-model="profile.nik"
@@ -78,8 +78,7 @@
 						label="Alamat"
 						v-model="profile.address"
 					></v-text-field>
-					<v-card color="grey lighten-1" class="mb-5" height="200px"></v-card>
-					<v-btn color="primary" @click.native="e1 = 1">Continue</v-btn>
+					<v-btn color="primary" @click="sendProfileData ">Continue</v-btn>
 					<v-btn flat>Cancel</v-btn>
         </v-stepper-content>
         </v-stepper-items>
@@ -100,7 +99,10 @@ export default {
 		return {
 			e1: 0,
 			house: {},
-			account: {},
+			account: {
+				email: '',
+				password: ''
+			},
 			profile: {},
 		}
 	},
@@ -135,37 +137,26 @@ export default {
 	},
 	computed: {
 		...mapState({
-			currentHousePick: state => state.currentHousePick,
-			currentProfile: state => state.currentProfile,
-			currentAccount: state => state.currentAccount
+			currentHousePick: state => state.main.currentHousePick,
+			currentProfile: state => state.main.currentProfile,
+			currentAccount: state => state.main.currentAccount
 		})
 	},
 	methods: {
-		async sendHouseData () {
-			try {
-				const sendHouse = await this.$store.dispatch('sendHouseData', this.house)	
-				this.e1 = 2
-			} catch (err) {
-				console.log(err)
-			}
+		sendHouseData () {
+			this.$store.dispatch('sendHouseData', this.house)	
+			this.e1 = 2
 		},
-		async sendAccountData () {
-			try {
-				const createdAccount = await this.$store.dispatch('sendAccountData', this.account)
-				this.e1 = 3
-			} catch (err) {
-				console.log(err)
-			}
+		sendAccountData () {
+			this.$store.dispatch('sendAccountData', this.account)
+			this.e1 = 3
 		},
-		async sendProfileData () {
-			try {
-				const createdProfile = await this.$store.dispatch('sendProfileData', this.profile)
-				// if (createdProfile) {
-				// 	this.e1 = 3
-				// }
-			} catch (err) {
-				console.log(err)
-			}
+		sendProfileData () {
+			this.$store.dispatch('sendProfileData', {
+				userId: this.currentAccount.id,
+				cifNumber: 123213213213,
+				...this.profile
+			})
 		}
 	}
 }
