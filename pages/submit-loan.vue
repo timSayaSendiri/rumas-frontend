@@ -5,9 +5,9 @@
         <v-stepper-header>
         <v-stepper-step step="1" :complete="e1 > 1">Isi Data Rumah</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="2" :complete="e1 > 2">Isi Data Diri</v-stepper-step>
+        <v-stepper-step step="2" :complete="e1 > 2">Isi Data Akun</v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="3">Data Akun</v-stepper-step>
+        <v-stepper-step step="3">Isi Data Diri</v-stepper-step>
         </v-stepper-header>
         <v-stepper-items>
         <v-stepper-content step="1">
@@ -54,10 +54,10 @@
 						label="Nama"
 						v-model="profile.name"
 					></v-text-field>
-					<v-text-field
-						label="Tanggal Lahir"
+					<v-date-picker
 						v-model="profile.birthDate"
-					></v-text-field>
+					>
+					</v-date-picker>
 					<v-text-field
 						label="NIK"
 						v-model="profile.nik"
@@ -143,32 +143,19 @@ export default {
 	},
 	methods: {
 		sendHouseData () {
-			try {
-				this.$store.dispatch('sendHouseData', this.house)	
-				this.e1 = 2
-			} catch (err) {
-				console.log(err)
-			}
+			this.$store.dispatch('sendHouseData', this.house)	
+			this.e1 = 2
 		},
 		sendAccountData () {
-			try {
-				this.$store.dispatch('sendAccountData', this.account)
-				this.e1 = 3
-			} catch (err) {
-				console.log(err)
-			}
+			this.$store.dispatch('sendAccountData', this.account)
+			this.e1 = 3
 		},
 		sendProfileData () {
-			console.log(this)
-			try {
-				this.$store.dispatch('sendProfileData', {
-					userId: this.currentAccount.id,
-					cifNumber: 123213213213,
-					...this.profile
-				})
-			} catch (err) {
-				console.log(err)
-			}
+			this.$store.dispatch('sendProfileData', {
+				userId: this.currentAccount.id,
+				cifNumber: 123213213213,
+				...this.profile
+			})
 		}
 	}
 }

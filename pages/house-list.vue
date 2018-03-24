@@ -37,11 +37,11 @@ export default {
       houseList: []
     }
   },
-  // computed: {
-  //   ...mapState({
-  //     houseList: state => state.houseList
-  //   })
-  // },
+  computed: {
+    ...mapState({
+    //   houseList: state => state.main.houseList
+    })
+  },
   mounted () {
     // this.$store.dispatch('getHouses')
     this.houseList = [{
