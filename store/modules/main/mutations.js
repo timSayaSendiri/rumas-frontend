@@ -32,6 +32,8 @@ const mutations = {
     }
   },
   fillUserTransaction (state, userTransaction) {
+    console.log(userTransaction);
+    
     state.userTransactions = userTransaction
   },
   fillUserLoan (state, userLoans) {
