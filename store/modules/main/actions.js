@@ -146,7 +146,8 @@ const actions = {
         email,
         motherName,
         cif_number,
-        birthDate
+        birthDate,
+        accountNumber
       }
     } = state
 
@@ -167,8 +168,8 @@ const actions = {
         date: iso.toISOString(),
         poorOfLoan: priceInRupiah,
         poorOfMonth: tenor,
-        toEthAddress: "",
-        fromEthAddress: "",
+        toEthAddress: accountNumber,
+        fromEthAddress: "7518265441944561",
         loanId: loan.id,
         userId
       })
