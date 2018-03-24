@@ -6,7 +6,8 @@ const state = {
   },
   houseList: [],
   currentHousePick: {},
-  currentAccount: {}
+  currentAccount: {},
+  goldPrice: 596842
 }
 
 export default state
