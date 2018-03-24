@@ -75,7 +75,10 @@ const actions = {
   async sendAccountData ({ commit }, accountData) {
     try {
       const createdAccount = await this.$axios.post(API_BASE_DOMAIN + '/users/register', accountData) 
-      commit('fillCurrentAccount', createdAccount.data.userDetail)
+      commit('fillCurrentAccount', {
+        ...createdAccount.data.userDetail,
+        userId: createdAccount.data.userDetail.id
+      })
     } catch (err) {
       console.log(err)
     }
@@ -109,11 +112,12 @@ const actions = {
         bankAccountNumber: createdBTNAccount.data.payload.nomor_rekening,
         amount: profileData.amount,
         blockChainAddress: createdBTNAccount.data.payload.nomor_rekening,
-        userId: state.currentAccount.id
+        userId: state.currentAccount.userId
       })
 
       commit('fillCurrentProfile', {
         ...createdProfile.data,
+        profileId: createdProfile.data.id,
         nik: profileData.nik,
         birthDate: profileData.birthDate,
         motherName: profileData.motherName,
