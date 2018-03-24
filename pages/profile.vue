@@ -59,7 +59,7 @@
        </v-layout>
        <v-layout>
        <v-flex xs12>
-        <v-btn block color="primary" dark>Lakukan Pembayaran</v-btn>
+        <v-btn block color="primary" @click="goToPayment" dark>Lakukan Pembayaran</v-btn>
        </v-flex>
        </v-layout>
      </v-layout> 
@@ -140,6 +140,11 @@ export default {
       hargaEmas:"600000",
     }
   },
+  methods:{
+    goToPayment(){
+      this.$router.push({path:'payment'})
+    }
+  },
   computed: {
     jumlahBayar(){
       return `${parseFloat(this.loanInfo.cicilanMinimunEmas) * parseFloat(this.hargaEmas)}`
@@ -153,9 +158,7 @@ export default {
     this.$validator.localize("en", bahasa);
     this.$store.dispatch('getProfileData', '5ab5aff49a0bea27dbb9efc1')
     this.$store.dispatch('getUserTransaction', '5ab5aff49a0bea27dbb9efc1')
-    this.profile = this.$store.state.main.userProfile 
-    console.log(this.$store.state.main.userProfile );
-    
+    this.profile = this.$store.state.main.userProfile
   },
 }
 </script>

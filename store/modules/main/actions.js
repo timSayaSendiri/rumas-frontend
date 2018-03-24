@@ -97,6 +97,10 @@ const actions = {
     } catch (err) {
       console.log(err)
     }
+  },
+  async getUserLoan({commit}, user_id) {
+    const loan = await this.$axios.get(`https://udin.us/rumas-backend/api/users/${user_id}/loans`) 
+    commit('fillUserLoan', loan.data[0] ) 
   }
 }
 

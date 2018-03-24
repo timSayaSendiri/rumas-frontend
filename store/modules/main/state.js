@@ -7,6 +7,7 @@ const state = {
   houseList: [],
   userTransactions:[],
   currentHousePick: {},
+  userLoans:{},
   userProfile:{},
   currentAccount: {}
 }
