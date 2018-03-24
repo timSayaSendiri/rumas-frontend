@@ -12,6 +12,21 @@ const mutations = {
   clearAlert(state) {
     state.alert.show = false;
     state.alert.content = "";
+  },
+  getHouses (state, houseList) {
+    state.houseList = houseList
+  },
+  fillCurrentHousePick (state, house) {
+    state.currentHousePick = house
+  },
+  fillCurrentAccount (state, account) {
+    state.account = account
+  },
+  fillCurrentProfile (state, profile) {
+    state.account = {
+      ...state.account,
+      ...profile
+    }
   }
 }
 
