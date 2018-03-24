@@ -108,7 +108,11 @@
 				<v-stepper-content step="4">
 					<v-text-field
 						label="Tenor"
-						v-model="tenor"
+						v-model="loanData.tenor"
+					></v-text-field>
+					<v-text-field
+						label="Gaji Perbulan"
+						v-model="loanData.earnings"
 					></v-text-field>
 					<v-btn color="primary" @click="initiateLoan">Continue</v-btn>
 				</v-stepper-content>
@@ -136,8 +140,7 @@ export default {
 			},
 			profile: {},
 			loanData: {},
-			tenor: 0,
-			modal: false
+			modal: false,
 		}
 	},
 	mounted() {
@@ -200,12 +203,13 @@ export default {
 		},
 		initiateLoan () {
 			const { id: houseId, price } = this.currentHousePick
-			const { tenor } = this.loanData
+			const { tenor, earnings } = this.loanData
 			const { id: userId } = this.currentAccount
 
 			this.$store.dispatch('sendLoanData', {
 				priceInRupiah: price,
 				goldWeight: price / 600000,
+				earnings,
 				tenor,
 				houseId,
 				userId
