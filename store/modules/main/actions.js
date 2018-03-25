@@ -161,7 +161,7 @@ const actions = {
       })
 
       const iso = new Date(balikDate(birthDate))
-      const transaction = await this.$axios.get(API_BASE_DOMAIN + '/transactions', {
+      const transaction = await this.$axios.post(API_BASE_DOMAIN + '/transactions', {
         type: 'loan',
         goldWeight,
         amountInRupiah: priceInRupiah,
@@ -207,8 +207,8 @@ const actions = {
       console.log(err)
     }
   },
-  async getUserLoan({commit}, user_id) {
-    const loan = await this.$axios.get(`https://udin.us/rumas-backend/api/users/${user_id}/loans`) 
+  async getUserLoan({commit, state}) {
+    const loan = await this.$axios.get(`https://udin.us/rumas-backend/api/users/${state.currentAccount.userId}/loans`) 
     commit('fillUserLoan', loan.data[0] ) 
   }
 }

@@ -126,6 +126,7 @@
 <script>
 import bahasa from 'vee-validate/dist/locale/id'
 import { mapState } from 'vuex'
+let userId = '5ab5aff49a0bea27dbb9efc1'
 export default {
     $_veeValidate: {
     validator: "new"
@@ -151,13 +152,15 @@ export default {
     },
     ...mapState({
       profile: state => state.main.userProfile,
-      transactions: state => state.main.userTransactions
+      transactions: state => state.main.userTransactions,
+      currentAccount: state => state.main.currentAccount
     })
   },
   mounted() {
+    userId = this.currentAccount.userId
     this.$validator.localize("en", bahasa);
-    this.$store.dispatch('getProfileData', '5ab5aff49a0bea27dbb9efc1')
-    this.$store.dispatch('getUserTransaction', '5ab5aff49a0bea27dbb9efc1')
+    this.$store.dispatch('getProfileData', userId)
+    this.$store.dispatch('getUserTransaction', userId)
     this.profile = this.$store.state.main.userProfile
   },
 }

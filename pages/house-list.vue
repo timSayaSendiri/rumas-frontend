@@ -34,8 +34,11 @@ import { mapState } from 'vuex'
 export default {
   data () {
     return {
-      searchKeyword: '',
+      searchKeyword: 'serpong',
     }
+  },
+  mounted() {
+
   },
   computed: {
     ...mapState({

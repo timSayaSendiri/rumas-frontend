@@ -34,8 +34,8 @@
 </v-layout>
 </template>
 <script>
-var firebase = require("firebase/app");
-require("firebase/firestore");
+import * as firebase from 'firebase'
+import 'firebase/firestore';
 // Initialize Firebase
 var config = {
   apiKey: "AIzaSyA5OMPMlNHBNGAZ9SfXou4-2CaeKAIuMxA",
@@ -45,8 +45,8 @@ var config = {
   storageBucket: "rumas-68d29.appspot.com",
   messagingSenderId: "151584561559"
 };
-firebase.initializeApp(config);
-var db = firebase.firestore();
+// firebase.initializeApp(config);
+var db = !firebase.apps.length ? firebase.initializeApp(config).firestore() : firebase.app().firestore();
 
 import { mapState } from 'vuex'
 const hargaEmas = 600000
@@ -65,7 +65,8 @@ export default {
   computed: {
      ...mapState({
       userLoans: state => state.main.userLoans,
-      userTransactions: state => state.main.userTransactions
+      userTransactions: state => state.main.userTransactions,
+      currentAccount: state => state.main.currentAccount
     })
   },
   methods:{
@@ -83,7 +84,7 @@ export default {
           toEthAddress:rumasRek,
           fromEthAddress:userRek,
         }
-  
+        const { userId } = this.currentAccount
         const payment = await this.$axios.post(`https://udin.us/rumas-backend/api/users/${userId}/transactions/`, q)
         this.$router.push({path:'profile'})
         // firebase
@@ -102,12 +103,15 @@ export default {
     }
   },
   mounted(){
-    this.$store.dispatch('getUserLoan', '5ab5aff49a0bea27dbb9efc1')
+    this.$store.dispatch('getUserLoan')
   },
   watch:{
     userLoans(newUserLoans){
       this.amountInRupiah = (newUserLoans.goldWeight/newUserLoans.tenor) * hargaEmas
       this.goldWeight = newUserLoans.goldWeight/newUserLoans.tenor
+    },
+    curentAccount(newcurentAccount){
+      this.rekeningUser = newcurentAccount.accountNumber
     }
   }
 
