@@ -66,7 +66,7 @@ export default {
      ...mapState({
       userLoans: state => state.main.userLoans,
       userTransactions: state => state.main.userTransactions,
-      currentAccount: state => state.main.curentAccount
+      currentAccount: state => state.main.currentAccount
     })
   },
   methods:{
