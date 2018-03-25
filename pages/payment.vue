@@ -49,7 +49,7 @@ var config = {
 var db = !firebase.apps.length ? firebase.initializeApp(config).firestore() : firebase.app().firestore();
 
 import { mapState } from 'vuex'
-const hargaEmas = 600000
+const hargaEmas = 620000
 const userRek = '12345678'
 const rumasRek = '7518265441944561'
 const userId = '5ab5aff49a0bea27dbb9efc1'
@@ -66,7 +66,7 @@ export default {
      ...mapState({
       userLoans: state => state.main.userLoans,
       userTransactions: state => state.main.userTransactions,
-      currentAccount: state => state.main.currentAccount
+      currentAccount: state => state.main.curentAccount
     })
   },
   methods:{

@@ -51,7 +51,7 @@
               <span class="body-2">Minimum payment</span>
             </v-layout>
             <v-layout justify-center>
-              <span class="body-1">Rp.{{this.jumlahBayar}}</span>
+              <span class="body-1">Rp.{{jumlahBayar}} </span>
             </v-layout>
           </v-flex>
         </v-layout>
@@ -90,11 +90,11 @@
                        <v-layout>
                          <v-flex xs6 >
                             <v-icon color="orange" class="pr-2"> monetization_on </v-icon>
-                            <span>{{transaction.goldWeight}} gram</span>
+                            <span>{{transaction.goldWeight.toFixed(2)}} gram</span>
                           </v-flex>
                         <v-flex xs6>
                           <v-icon class="pr-2" color="green"> attach_money </v-icon> 
-                          <span>Rp.{{transaction.amountInRupiah}}</span>
+                          <span>Rp.{{transaction.amountInRupiah.toFixed(2)}}</span>
                         </v-flex>
                        </v-layout>
                     </v-layout>
@@ -106,7 +106,7 @@
                       <v-layout>
                         <v-flex xs6>
                           <v-icon class="pr-2" color="orange"> monetization_on </v-icon>
-                        <span>{{transaction.poorOfLoan}} gram</span> 
+                        <span>{{transaction.poorOfLoan.toFixed(2)}} gram</span> 
                         </v-flex>
                         <v-flex xs6>
                           <span>{{transaction.poorOfMonth}} bulan</span>  
@@ -138,7 +138,7 @@ export default {
         sisaHutang:'990',
         cicilanMinimunEmas:'10'
       },
-      hargaEmas:"600000",
+      hargaEmas:"620000",
     }
   },
   methods:{
@@ -153,6 +153,7 @@ export default {
     ...mapState({
       profile: state => state.main.userProfile,
       transactions: state => state.main.userTransactions,
+      loan:state => state.main.userLoans,
       currentAccount: state => state.main.currentAccount
     })
   },
@@ -163,6 +164,16 @@ export default {
     this.$store.dispatch('getUserTransaction', userId)
     this.profile = this.$store.state.main.userProfile
   },
+   watch:{
+    transactions(newTransactions){
+      this.loanInfo.sisaTenor = newTransactions[newTransactions.length - 1].poorOfMonth 
+      this.loanInfo.sisaHutang = newTransactions[newTransactions.length - 1].poorOfLoan
+    },
+    loan(newLoan){
+      console.log('----newLoan',newLoan)
+      this.loanInfo.cicilanMinimunEmas = parseFloat(newLoan.goldWeight)/parseFloat(newLoan.tenor)
+    }
+  }
 }
 </script>
 <style>
