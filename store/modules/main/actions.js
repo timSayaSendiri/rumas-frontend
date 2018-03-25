@@ -161,7 +161,7 @@ const actions = {
       })
 
       const iso = new Date(balikDate(birthDate))
-      const transaction = await this.$axios.get(API_BASE_DOMAIN + '/transactions', {
+      const transaction = await this.$axios.post(API_BASE_DOMAIN + '/transactions', {
         type: 'loan',
         goldWeight,
         amountInRupiah: priceInRupiah,

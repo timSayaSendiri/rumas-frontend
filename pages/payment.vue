@@ -66,7 +66,7 @@ export default {
      ...mapState({
       userLoans: state => state.main.userLoans,
       userTransactions: state => state.main.userTransactions,
-      curentAccount: state => state.main.curentAccount
+      currentAccount: state => state.main.currentAccount
     })
   },
   methods:{
@@ -84,10 +84,9 @@ export default {
           toEthAddress:rumasRek,
           fromEthAddress:userRek,
         }
-  
+        const { userId } = this.currentAccount
         const payment = await this.$axios.post(`https://udin.us/rumas-backend/api/users/${userId}/transactions/`, q)
         this.$router.push({path:'profile'})
-        console.log('---------lalasas')
         // firebase
         db.collection("transactions").add(q)
         .then(function() {
