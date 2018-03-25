@@ -169,6 +169,8 @@ export default {
 				},
 				imageUrl: gbr1,
 			}
+
+			this.seedData ()
 		}
 		this.$validator.localize("en", bahasa);
 	},
@@ -216,6 +218,15 @@ export default {
 			})
 
 			this.$router.push('/profile')
+		},
+		seedData () {
+			this.profile = {
+				name: 'Hepiska Franatagola',
+				birthDate: '1992-10-10',
+				phone: 'Hepiska Franatagola',
+				address: 'Hepiska Franatagola',
+				motherName: 'Mrs. Franatagola',
+			}
 		}
 	}
 }
