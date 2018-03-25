@@ -45,8 +45,9 @@ var config = {
   storageBucket: "rumas-68d29.appspot.com",
   messagingSenderId: "151584561559"
 };
-// firebase.initializeApp(config);
-var db = !firebase.apps.length ? firebase.initializeApp(config).firestore() : firebase.app().firestore();
+firebase.initializeApp(config);
+var db = firebase.firestore() 
+// var db = !firebase.apps.length ? firebase.initializeApp(config).firestore() : firebase.app().firestore();
 
 import { mapState } from 'vuex'
 const hargaEmas = 620000
@@ -86,15 +87,18 @@ export default {
         }
         const { userId } = this.currentAccount
         const payment = await this.$axios.post(`https://udin.us/rumas-backend/api/users/${userId}/transactions/`, q)
-        this.$router.push({path:'profile'})
+
         // firebase
-        db.collection("transactions").add(q)
+        db.collection("transactions").add({...q, userId:'5ab5aff49a0bea27dbb9efc1'})
         .then(function() {
             console.log("Document successfully written!");
         })
         .catch(function(error) {
             console.error("Error writing document: ", error);
         });
+        
+        this.$router.push({path:'profile'})
+
       }catch(err){
         console.log(err);
         
