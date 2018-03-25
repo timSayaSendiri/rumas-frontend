@@ -7,6 +7,8 @@
         @keyup="getHouses"
       ></v-text-field> 
     </v-flex>
+    <v-progress-linear :indeterminate="true" v-if="houseList.length == 0"></v-progress-linear>
+
     <v-flex xs12 pa-1 sm6 md3 v-for="(house, index) in houseList" :key="index">
       <v-card>
         <v-card-media src="" height="200px">
@@ -38,7 +40,7 @@ export default {
     }
   },
   mounted() {
-
+    this.$store.dispatch('getHouses', 'serpong') 
   },
   computed: {
     ...mapState({
