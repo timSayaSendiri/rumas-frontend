@@ -158,7 +158,7 @@ export default {
     })
   },
   mounted() {
-    userId = this.currentAccount.userId
+    userId = this.currentAccount ? this.currentAccount.userId : userId
     this.$validator.localize("en", bahasa);
     this.$store.dispatch('getProfileData', userId)
     this.$store.dispatch('getUserTransaction', userId)
@@ -170,7 +170,7 @@ export default {
       this.loanInfo.sisaHutang = newTransactions[newTransactions.length - 1].poorOfLoan
     },
     loan(newLoan){
-      console.log('----newLoan',newLoan)
+      // console.log('----newLoan',newLoan)
       this.loanInfo.cicilanMinimunEmas = parseFloat(newLoan.goldWeight)/parseFloat(newLoan.tenor)
     }
   }
