@@ -9,7 +9,7 @@
                 size="60px"
                 class="grey lighten-4 mb-2"
               >
-              <img :src="profile.profilePictureName" alt="avatar">
+              <img src="https://art.placefull.com/Content/Properties/shared/images/no-profile-image.png" alt="avatar">
             </v-avatar>
             <span class="title">{{profile.name}}</span>
            </v-layout>
