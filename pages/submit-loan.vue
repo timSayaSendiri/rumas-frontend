@@ -219,10 +219,10 @@ export default {
 		},
 		seedData () {
 			this.profile = {
-				name: 'Hepiska Franatagola',
+				name: 'Diky A.',
 				birthDate: '1992-10-10',
 				phone: '08898982983',
-				address: 'Hepiska Franatagola',
+				address: 'Kemang, Jakarta Selatan',
 				motherName: 'Mrs. Franatagola',
 			}
 		}
