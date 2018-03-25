@@ -91,10 +91,6 @@
 						v-model="profile.motherName"
 					></v-text-field>
 					<v-text-field
-						label="Foto"
-						v-model="profile.profilePictureName"
-					></v-text-field>
-					<v-text-field
 						label="Alamat"
 						v-model="profile.address"
 					></v-text-field>
@@ -138,7 +134,9 @@ export default {
 				email: '',
 				password: ''
 			},
-			profile: {},
+			profile: {
+				profilePictureName: 'https://art.placefull.com/Content/Properties/shared/images/no-profile-image.png'
+			},
 			loanData: {},
 			modal: false,
 		}
@@ -223,7 +221,7 @@ export default {
 			this.profile = {
 				name: 'Hepiska Franatagola',
 				birthDate: '1992-10-10',
-				phone: 'Hepiska Franatagola',
+				phone: '08898982983',
 				address: 'Hepiska Franatagola',
 				motherName: 'Mrs. Franatagola',
 			}
