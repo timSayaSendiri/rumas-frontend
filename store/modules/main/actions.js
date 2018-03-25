@@ -166,7 +166,7 @@ const actions = {
         goldWeight,
         amountInRupiah: priceInRupiah,
         date: iso.toISOString(),
-        poorOfLoan: priceInRupiah,
+        poorOfLoan: goldWeight,
         poorOfMonth: tenor,
         toEthAddress: accountNumber,
         fromEthAddress: "7518265441944561",
